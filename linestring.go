@@ -46,7 +46,7 @@ func NewLineString(coordinates ...[]float64) (LineString, error) {
 	case 2:
 		return LineString{
 			// TODO iterate
-			geom: geom.NewLineStringFlat(geom.XY, flattenCoordinate).SetSRID(4326), // TODO SRID should be configurable
+			geom: geom.NewLineStringFlat(geom.XY, flattenCoordinate).SetSRID(3857), // TODO SRID should be configurable
 		}, nil
 	case 3:
 		return LineString{
@@ -84,7 +84,7 @@ func (p LineString) Value() (driver.Value, error) {
 		return "", errors.New(fmt.Sprintf("layout %s not implemented", p.geom.Layout()))
 	}
 	strLineString = strings.TrimSuffix(strLineString, ",")
-	return fmt.Sprintf("SRID=4326;LINESTRING(%v)", strLineString), nil
+	return fmt.Sprintf("SRID=3857;LINESTRING(%v)", strLineString), nil
 }
 
 func (LineString) GormDBDataType(db *gorm.DB, field *schema.Field) string {
@@ -95,7 +95,7 @@ func (LineString) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	case "postgres":
 		srid, exists := field.TagSettings["SRID"]
 		if !exists {
-			srid = "4326"
+			srid = "3857"
 		}
 		return fmt.Sprintf("geometry(LINESTRING, %s)", srid)
 	}
@@ -103,5 +103,5 @@ func (LineString) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 }
 
 func (LineString) GormDataType() string {
-	return "geometry(LineString, 4326)"
+	return "geometry(LineString, 3857)"
 }

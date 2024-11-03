@@ -10,8 +10,8 @@ import (
 type Geom struct {
 	gorm.Model
 	Name  string
-	Point georm.Point `gorm:"srid:4326"`
-	LineString georm.LineString `gorm:"srid:4326"`
+	Point georm.Point `gorm:"srid:3857"`
+	LineString georm.LineString `gorm:"srid:3857"`
 }
 
 func main() {
